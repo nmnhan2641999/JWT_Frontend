@@ -1,13 +1,13 @@
 import './App.scss'
-import Login from './component/Login/Login';
 import Nav from './component/Navigation/Nav';
-
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 
 } from "react-router-dom";
+import Login from './component/Login/Login';
+import Register from './component/Register/Register';
 
 
 
@@ -27,6 +27,9 @@ function App() {
         </Route>
         <Route path="/login">
           <Login />
+        </Route>
+        <Route path="/register">
+          <Register />
         </Route>
         <Route path="/" exact>
           home
