@@ -1,17 +1,25 @@
 import './Login.scss'
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
+import { useEffect } from 'react';
 
 const Login = (props) => {
     let history = useHistory();
-    const handleCreateNuewAccount = () => {
+    const handleCreateNewAccount = () => {
         history.push("/register");
     }
 
+    useEffect(() => {
+        // axios.get("http://localhost:8080/api/test-api").then(data => {
+        //     console.log(">>>> Check data axios from reqres.in by userEffect", data)
+        // })
+    }, []);
+
     return (
-        <div className="login-container pt-3">
+        <div className="login-container pt-3 ">
             <div className="container ">
                 <div className="row px-3 px-sm-0 ">
-                    <div className="content-left col-12 d-none col-sm-7 d-sm-block align-self-center ">
+                    <div className="content-left col-12 d-none col-sm-7 d-sm-block  ">
                         <div className='brand'>Nn99</div>
                         <div className='detail'>Nn99 helps you connect and share with the people in your life.</div>
                     </div>
@@ -23,7 +31,7 @@ const Login = (props) => {
                         <span className='text-center'><a className='forgot_password' href='#'>Forgotten password?</a></span>
                         <hr />
                         <div className='text-center'>
-                            <button className='btn btn-success py-3' onClick={() => handleCreateNuewAccount()}>Create new account</button>
+                            <button className='btn btn-success py-3' onClick={() => handleCreateNewAccount()}>Create new account</button>
                         </div>
                     </div>
 
