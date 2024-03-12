@@ -1,14 +1,24 @@
 import './Register.scss'
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
+
 
 const Register = (props) => {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
-    const [userName, setUserName] = useState("");
+    const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-
+    const defaultValidInput = {
+        isValidEmail: true,
+        isValidPhone: true,
+        isValidPassword: true,
+        isValidConfirmPassword: true,
+    }
+    const [objCheckInput, setObjCheckInput] = useState(defaultValidInput);
 
 
     let history = useHistory();
@@ -16,15 +26,70 @@ const Register = (props) => {
         history.push("/login");
     }
 
-    const handleRegister = () => {
-        let userData = {
-            email: email,
-            phone: phone,
-            userName: userName,
-            password: password
+    useEffect(() => {
+        // axios.get("http://localhost:8080/api/v1/test-api").then(data => {
+        //     console.log(">>>> Check data axios from reqres.in by userEffect", data)
+        // })
+
+
+    }, []);
+
+
+
+
+
+
+
+    const isValidInputs = () => {
+        setObjCheckInput(defaultValidInput)
+
+        if (!email) {
+            toast.error("Email is required!")
+            setObjCheckInput({ ...defaultValidInput, isValidEmail: false })
+            return false
         }
-        console.log(">>>>>check userData", userData)
+        const regEmail = /\S+@\S+\.\S+/;
+        if (!regEmail.test(email)) {
+            toast.error("Please input valid email again")
+            setObjCheckInput({ ...defaultValidInput, isValidEmail: false })
+            return false;
+        }
+        if (!phone) {
+            toast.error("Phone is required!")
+            setObjCheckInput({ ...defaultValidInput, isValidPhone: false })
+            return false
+        }
+        const regPhone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+        if (!regPhone.test(phone)) {
+            toast.error("Please input valid phune number again")
+            setObjCheckInput({ ...defaultValidInput, isValidPhone: false })
+            return false;
+        }
+
+        if (!password) {
+            toast.error("Password is required!")
+            setObjCheckInput({ ...defaultValidInput, isValidPassword: false })
+            return false
+        }
+
+        if (password !== confirmPassword) {
+            toast.error("Your password is not the same")
+            setObjCheckInput({ ...defaultValidInput, isValidConfirmPassword: false })
+
+            return false
+        }
+        return true;
     }
+
+    const handleRegister = () => {
+        let check = isValidInputs();
+        if (check == true) {
+            axios.post('http://localhost:8080/api/v1/register', {
+                email, phone, username, password
+            })
+        }
+    }
+
 
     return (
         <div className="register-container pt-3">
@@ -38,41 +103,37 @@ const Register = (props) => {
                         <div className='brand d-block d-sm-none'>Register</div>
                         <div className='form-group'>
                             <label>Email:</label>
-                            <input type='text' className='form-control' placeholder='Email address'
+                            <input type='text' className={objCheckInput.isValidEmail ? 'form-control' : 'form-control is-invalid'} placeholder='Email address'
                                 value={email} onChange={(event) => setEmail(event.target.value)}
 
                             ></input>
                         </div>
                         <div className='form-group'>
                             <label>PhomeNumber:</label>
-                            <input type='text' className='form-control' placeholder='Phome Number'
+                            <input type='text' className={objCheckInput.isValidPhone ? 'form-control' : 'form-control is-invalid'} placeholder='Phome Number'
                                 value={phone} onChange={(event) => setPhone(event.target.value)}
 
                             ></input>
                         </div>
                         <div className='form-group'>
                             <label>UserName:</label>
-                            <input type='text' className='form-control' placeholder='User Name'
-                                value={userName} onChange={(event) => setUserName(event.target.value)}
+                            <input type='text' className='form-control' placeholder='UserName'
+                                value={username} onChange={(event) => setUserName(event.target.value)}
 
                             ></input>
                         </div>
                         <div className='form-group'>
                             <label>Password:</label>
-                            <input type='text' className='form-control' placeholder='Password'
+                            <input type='text' className={objCheckInput.isValidPassword ? 'form-control' : 'form-control is-invalid'} placeholder='Password'
                                 value={password} onChange={(envent) => setPassword(envent.target.value)}
                             ></input>
                         </div>
                         <div className='form-group'>
                             <label>re-enter Password:</label>
-                            <input type='text' className='form-control' placeholder='re-enter Password'
+                            <input type='text' className={objCheckInput.isValidConfirmPassword ? 'form-control' : 'form-control is-invalid'} placeholder='re-enter Password'
                                 value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)}
                             ></input>
                         </div>
-
-
-
-
                         <button className='btn btn-primary' onClick={() => handleRegister()}>Register</button>
                         <hr />
                         <div className='text-center'>
@@ -82,7 +143,8 @@ const Register = (props) => {
 
                 </div>
             </div>
-        </div >
+
+        </div>
     )
 }
 export default Register

@@ -1,7 +1,7 @@
 import './Login.scss'
 import { useHistory } from "react-router-dom";
-import axios from 'axios';
-import { useEffect } from 'react';
+// import axios from 'axios';
+// import { useEffect } from 'react';
 
 const Login = (props) => {
     let history = useHistory();
@@ -9,11 +9,7 @@ const Login = (props) => {
         history.push("/register");
     }
 
-    useEffect(() => {
-        // axios.get("http://localhost:8080/api/test-api").then(data => {
-        //     console.log(">>>> Check data axios from reqres.in by userEffect", data)
-        // })
-    }, []);
+
 
     return (
         <div className="login-container pt-3 ">
